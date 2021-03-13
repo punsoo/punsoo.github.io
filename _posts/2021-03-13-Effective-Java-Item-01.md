@@ -1,6 +1,5 @@
 ---
 defaults:
-  # _posts
   - scope:
       path: ""
       type: posts
@@ -11,6 +10,15 @@ defaults:
       comments: true
       share: true
       related: true
+title: "Effective Java Item 01"
+excerpt: "Effective Java Item 01"
+
+categories:
+  - Effective Java
+tags:
+  - Effective Java
+  - 정적 팩터리 메소드
+
 ---
 
 <table>
