@@ -10,9 +10,12 @@ defaults:
       comments: true
       share: true
       related: true
+
 title: "Effective Java Item 01"
 excerpt: "Effective Java Item 01"
-
+toc: true
+toc_sticky: true
+toc_label: "목차"
 categories:
   - Effective Java
 tags:
