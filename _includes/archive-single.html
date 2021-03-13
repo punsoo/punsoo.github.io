@@ -25,8 +25,10 @@
       {% endif %}
     </h2>
 
-    #아키이브 싱글 페이지(ex. 카테고리)에 각 포스트 제목 밑에 Updated 시간 표기
-    #기존에는 read_time이 표기. read_time -> date 변경
+    <!--
+    아키이브 싱글 페이지(ex. 카테고리)에 각 포스트 제목 밑에 Updated 시간 표기
+    기존에는 read_time이 표기. read_time -> date 변경
+    -->
 
     {% if post.date %}
       <p class="page__meta"><i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i> {{ post.date | date: "%B %d %Y" }}</p>
