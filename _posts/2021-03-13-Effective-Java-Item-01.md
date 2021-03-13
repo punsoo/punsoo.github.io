@@ -12,7 +12,7 @@ defaults:
       related: true
 
 title: "Effective Java Item 01"
-excerpt: "Effective Java Item 01"
+excerpt: "생성자 대신 정적 팩터리 메서드를 고려하라"
 toc: true
 toc_sticky: true
 toc_label: "목차"
@@ -23,6 +23,3 @@ tags:
   - 정적 팩터리 메소드
 
 ---
-
-많이 힘이 든다  
-죽고 싶을 때 어떡해야할까
