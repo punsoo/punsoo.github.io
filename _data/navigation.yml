@@ -3,7 +3,9 @@ main:
 
    - title: "Categories"
      url: /categories/
-   - title: "Archive"
+   - title: "Yearly"
      url: /year-archive/
+   - title: "Monthly"
+     url: /month-archive/
    - title: tag
      url: /tags/
