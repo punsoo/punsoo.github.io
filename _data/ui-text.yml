@@ -23,6 +23,7 @@ en: &DEFAULT_EN
   tags_label                 : "Tags:"
   categories_label           : "Categories:"
   date_label                 : "Date:"
+  update_label               : "Updated:"
   comments_label             : "댓글"
   comments_title             : "Comments"
   more_label                 : "Learn more"
