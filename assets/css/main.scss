@@ -18,5 +18,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Cafe24Oneprettynight";
+  font-family: $cute;
+}
+p[data-cute="true"] {
+  font-family: $cute;
 }
