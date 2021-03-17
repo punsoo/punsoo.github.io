@@ -84,25 +84,47 @@ ex) Driver*
 
 생성자처럼 API 설명에 명확히 드러나지 않으니 사용자는 정적 매서드 방식 클래스를 인스턴스화할 방법을 알아내야 한다.
 
-## 명명 방식 
+## 정적 팩터리 메소드에 사용하는 명명 방식 
 
-from: 매개 변수를 하나 받아서 해당 타입의 인스턴스를 반환하는 형변환 메서드  
-''' java  
+**from**: 매개 변수를 하나 받아서 해당 타입의 인스턴스를 반환하는 형변환 메서드  
+``` java  
 ex) Date d = Date.from(instant);
-'''
+```
 
-of: 여러 매개변수를 받아 적합한 타입의 인스턴스를 반환하는 집계 메서드  
-''' java  
+**of**: 여러 매개변수를 받아 적합한 타입의 인스턴스를 반환하는 집계 메서드  
+``` java  
 ex) Set(Rank) faceCards = EnumSet.of(JACK, QUEEN, KING);
-'''
+```
 
-valueof: from과 of의 더 자세한 버전  
-''' java  
+**valueof**: from과 of의 더 자세한 버전  
+``` java  
 ex) BigInteger prime = BigInteger.valueOf(Integer.Max_VALUE);
-'''
+```
 
-instance 혹은 getInstance: (매개변수를 받는다면) 매개변수로 명시한 인스턴슬르 반환하지만, 같은 인스턴스임을 보장하지는 않는다.  
-''' java  
+**instance 혹은 getInstance**: (매개변수를 받는다면) 매개변수로 명시한 인스턴스를 반환하지만, 같은 인스턴스임을 보장하지는 않는다.  
+``` java  
 ex) StackWalker luke = StackWalker.getInstance(options)
-'''
+```
+
+**create 혹은 newInstance**: instance 혹은 getInstance와 같지만, 매번 새로운 인스턴스를 생성해 반환함을 보장한다.
+``` java
+ex) Object newArray = Array.newInstance(classObject, arrayLen);
+```
+
+**getType**: getInstance와 같으나, 생성할 클래스가 아닌 다른 클래스에 팩터리 메서드를 정의할 때 쓴다.
+"Type"은 팩터리 메서드가 반환할 객체의 타입이다.
+```
+ex) FileStore fs = Files.getFileStore(path);
+```
+
+**newType**: newInstance와 같으나, 생성할 클래스가 아닌 다른 클래스에 팩터리 메서드를 정의할 때 쓴다.
+"Type"은 팩터리 메서드가 반환활 객체의 타입이다.
+```
+ex) BufferedReader br = Files.newBufferedReader(path);
+```
+
+**type**: getType과 newType의 간결한 버전
+```
+ex) List<Complaint> litany = Collections.list(legacyLitany);
+```
 
