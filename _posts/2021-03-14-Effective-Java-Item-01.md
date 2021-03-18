@@ -43,8 +43,9 @@ last_modified_at: 2021-03-18
 반환할 객체의 클래스를 자유롭게 선택할 수 있는 '엄청난 유연성'을 제공한다.  
 구현 클래스를 공개하지 않고도 그 객체를 반환할 수 있어 API를 작게 유지할 수 있다.  
 
-*EX) 자바 컬렉션 프레임워크는 45개의 유틸리티 구현체를 제공하지만, 단 하나의  
-java.util.Collections에서 정적 팩터리 메서드를 통해 얻도록 했다.*  
+*EX) 자바 컬렉션 프레임워크는 45개의 유틸리티 구현체를 제공하지만 공개하지는 않았다(public이 아니다)  
+단 하나의 인스턴스화 불가 클래스인 java.util.Collections에서 정적 팩터리 메서드를 통해  
+45개의 구현체를 얻도록 했다.*  
 
 ## 4️⃣ 입력 매개변수에 따라 매번 다른 클래스의 객체를 반환할 수 있다.  
 
@@ -138,3 +139,10 @@ ex) BufferedReader br = Files.newBufferedReader(path);
 ex) List<Complaint> litany = Collections.list(legacyLitany);
 ```
 
+___
+참고(Reference)
+
+[이펙티브 자바 01. 정적 팩토리 메소드와 서비스 제공자 인터페이스 (JDBC 예제)](https://plposer.tistory.com/61)  
+[[Java] Class.forName(String className) 그리고 Service Provider Interface](https://devyongsik.tistory.com/294)
+[[Java 궁금증] Class.forName()은 어떻게 동작할까?](https://kyun2.tistory.com/23)  
+[클래스로더 1, 동적인 클래스 로딩과 클래스로더](https://javacan.tistory.com/entry/1)
