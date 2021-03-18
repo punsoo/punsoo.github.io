@@ -146,4 +146,5 @@ ___
 [이펙티브 자바 01. 정적 팩토리 메소드와 서비스 제공자 인터페이스 (JDBC 예제)](https://plposer.tistory.com/61)  
 [[Java] Class.forName(String className) 그리고 Service Provider Interface](https://devyongsik.tistory.com/294)  
 [[Java 궁금증] Class.forName()은 어떻게 동작할까?](https://kyun2.tistory.com/23)  
-[클래스로더 1, 동적인 클래스 로딩과 클래스로더](https://javacan.tistory.com/entry/1)
+[클래스로더 1, 동적인 클래스 로딩과 클래스로더](https://javacan.tistory.com/entry/1)  
+[SPI와 API 차이](https://m.blog.naver.com/PostView.nhn?blogId=miniwikibook&logNo=60164835890&proxyReferer=https:%2F%2Fwww.google.com%2F)
