@@ -56,9 +56,8 @@ last_modified_at: 2021-03-18
 ## 5️⃣ 정적 팩터리 메서드를 작성하는 시점에는 반환할 객체의 클래스가 존재하지 않아도 된다.
 
 이런 유연함은 서비스 제공자 프레임워크(service provider framework)를 만드는 근간이 된다.  
-대표적인 서비스 제공자 프레임워크인 JDBC를 예로 들자면  
-DriverManager.getConnection 메소드를 작성하는 시점에는 Connection 인터페이스를 구현한 클래스가  
-존재하지 않아도 된다는 것이다.
+대표적인 서비스 제공자 프레임워크인 JDBC를 예로 들자면 DriverManager.getConnection 메소드를 작성하는 시점에는 Connection 인터페이스를 구현한 클래스가 
+존재하지 않아도 된다는 것이다.  
 클라이언트는 어떤 제공자(Mysql, Oracle, SqlServer - 서비스의 구현체)가 사용되건 상관없이 Driver, connection 서비스 인터페이스를 통해 구현체를 사용할 수 있다.   
 각각의 DBMS의 벤더사에서 Driver, Connection 인터페이스를 구현하여 제공해줄 것이다.  
 **즉 Driver, connection 인터페이스와 실제 그 인터페이스를 구현하는 구현체 클래스가 완전히 분리되어 제공되는 것이다.**  
@@ -92,7 +91,9 @@ DriverManager.registerDriver를 통해 처리된다.
 ## 2️⃣ 하위 클래스를 만들 수 없다.(상속을 할 수 없다.)
 
 생성자처럼 API 설명에 명확히 드러나지 않으니 사용자는 정적 매서드 방식 클래스를 인스턴스화할 방법을 알아내야 한다.
-![image](https://user-images.githubusercontent.com/68231412/111687943-40361b80-886e-11eb-9edd-a091b94bc2e4.png)
+
+![image](https://user-images.githubusercontent.com/68231412/111687943-40361b80-886e-11eb-9edd-a091b94bc2e4.png)  
+
 그림에서 보다시피 메소드와 달리 생성자는 한번에 구분해서 볼 수 있는 장점이 있다.
 
 ## 정적 팩터리 메소드에 사용하는 명명 방식 
@@ -122,13 +123,13 @@ ex) StackWalker luke = StackWalker.getInstance(options)
 ex) Object newArray = Array.newInstance(classObject, arrayLen);
 ```
 
-**getType**: getInstance와 같으나, 생성할 클래스가 아닌 다른 클래스에 팩터리 메서드를 정의할 때 쓴다.
+**getType**: getInstance와 같으나, 생성할 클래스가 아닌 다른 클래스에 팩터리 메서드를 정의할 때 쓴다.  
 "Type"은 팩터리 메서드가 반환할 객체의 타입이다.
 ```
 ex) FileStore fs = Files.getFileStore(path);
 ```
 
-**newType**: newInstance와 같으나, 생성할 클래스가 아닌 다른 클래스에 팩터리 메서드를 정의할 때 쓴다.
+**newType**: newInstance와 같으나, 생성할 클래스가 아닌 다른 클래스에 팩터리 메서드를 정의할 때 쓴다.  
 "Type"은 팩터리 메서드가 반환활 객체의 타입이다.
 ```
 ex) BufferedReader br = Files.newBufferedReader(path);
@@ -143,6 +144,6 @@ ___
 참고(Reference)
 
 [이펙티브 자바 01. 정적 팩토리 메소드와 서비스 제공자 인터페이스 (JDBC 예제)](https://plposer.tistory.com/61)  
-[[Java] Class.forName(String className) 그리고 Service Provider Interface](https://devyongsik.tistory.com/294)
+[[Java] Class.forName(String className) 그리고 Service Provider Interface](https://devyongsik.tistory.com/294)  
 [[Java 궁금증] Class.forName()은 어떻게 동작할까?](https://kyun2.tistory.com/23)  
 [클래스로더 1, 동적인 클래스 로딩과 클래스로더](https://javacan.tistory.com/entry/1)
