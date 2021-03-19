@@ -141,7 +141,8 @@ public enum  Elvis {
 
 단, 만들려는 싱글턴이 Enum 외의 클래스를 상속해야 한다면 이 방법은 사용할 수 없다.
 (열거 타입이 다른 인터페이스를 구현하도록 선언할 수는 있다.)
-___
+
+***
 참고(Reference)  
 [mocking-a-singleton-class](https://stackoverflow.com/questions/2302179/mocking-a-singleton-class)  
 [advantage-of-singleton-implementing-an-interface](https://stackoverflow.com/questions/17988251/advantage-of-singleton-implementing-an-interface)  
