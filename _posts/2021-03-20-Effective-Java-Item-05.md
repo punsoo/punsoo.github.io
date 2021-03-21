@@ -33,9 +33,9 @@ last_modified_at: 2021-03-20
 ```java
 public class SpellChecker{
 	private static final Lexicon dictionary = ...;
-	
+
 	private SpellChecker(){} // 객체 생성 방지
-	
+
 	public static boolean isValid(String word){...}
 	public List<String> suggestions(String type){...}
 }
@@ -48,23 +48,25 @@ public class SpellChecker{
 
 	private SpellChecker(...){}
 	public static SpellChecker INSTANCE = new SpellChecker(...);
-	
+
 	public static boolean isValid(String word){...}
 	public List<String> suggestions(String type){...}
 }
 ```
-위의 두 방식 모두 사전을 단 하나만 사용한다고 가정한다는 점에서 그리 훌륭해 보이지 않다.  
-SpellChecker가 여러 사전을 사용할 수 있도록 해보자.  
-의존 객체 주입의 한 형태로 인스턴스를 생성할 때 생성자에 필요한 자원을 넘겨주도록 하자.
+위의 두 방식 모두 사전을 단 하나만 사용한다고 가정한다는 점에서 그리 훌륭해 보이지 않다.
+
+이번에는 SpellChecker가 여러 사전을 사용할 수 있도록 해보자.  
+인스턴스를 생성할 때 생성자에 필요한 자원을 넘겨주도록 하자.
+이 방식은 의존 객체 주입의 한 형태이다.
 
 ```java
 public class SpellChecker {
     private final Lexicon dictionary;
-    
+
     public SpellChecker(Lexicon dictionary){
     	this.dictionary = Objects.requireNotNull(dictionary);
     }
-    
+
     public static boolean isVaild(String word) {...}
     public static List<String> suggestions(String typo) {...}
 }
@@ -85,6 +87,6 @@ Supplier<T>를 입력으로 받는 메서드는 일반적으로 한정적 와일
 Mosaic create(Supplier<? extends Tile> tileFactory) { ... }
 ```
 
-의존 객체 주입이 유연성과 테스트 용이성을 개선해주긴 하지만, 의존성이 수천 개나 되는 큰 프로젝트에서는 코드를 어지럽게 
-하기도 한다. 그럴 때는 대거(Dagger), 주스(Guice), 스프링(Spring) 같은 의존 객체 주입 프레임워크를 사용하면 이런 
+의존 객체 주입이 유연성과 테스트 용이성을 개선해주긴 하지만, 의존성이 수천 개나 되는 큰 프로젝트에서는 코드를 어지럽게
+하기도 한다. 그럴 때는 대거(Dagger), 주스(Guice), 스프링(Spring) 같은 의존 객체 주입 프레임워크를 사용하면 이런
 어질러짐을 해소할 수 있다.
