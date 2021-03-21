@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Effective Java
 tags:
-  - [Effective Java, 싱글톤]
+  - [Effective Java, 의존 객체 주입]
 date: 2021-03-20
 last_modified_at: 2021-03-20
 ---
