@@ -19,8 +19,8 @@ categories:
   - Effective Java
 tags:
   - [Effective Java, 의존 객체 주입]
-date: 2021-03-20
-last_modified_at: 2021-03-20
+date: 2021-03-21
+last_modified_at: 2021-03-21
 ---
 
 # 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
