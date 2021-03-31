@@ -73,7 +73,7 @@ DriverManager.registerDriver를 통해 처리된다.
 ___
 참고(Reference)
 
-[[구조 패턴] 플라이웨이트 패턴(Flyweight Pattern) 이해 및 예제](https://readystory.tistory.com/137)
+[[구조 패턴] 플라이웨이트 패턴(Flyweight Pattern) 이해 및 예제](https://readystory.tistory.com/137)  
 [이펙티브 자바 01. 정적 팩토리 메소드와 서비스 제공자 인터페이스 (JDBC 예제)](https://plposer.tistory.com/61)  
 [[Java] Class.forName(String className) 그리고 Service Provider Interface](https://devyongsik.tistory.com/294)  
 [[Java 궁금증] Class.forName()은 어떻게 동작할까?](https://kyun2.tistory.com/23)  
