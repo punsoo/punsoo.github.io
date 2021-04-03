@@ -10,7 +10,7 @@ defaults:
       share: true
       related: true
 
-title: "Effective Java Item 08"
+title: "Effective Java Item 43"
 excerpt: "람다보다는 메서드 참조를 사용하라"
 toc: true
 toc_sticky: true
@@ -19,8 +19,8 @@ categories:
   - Effective Java
 tags:
   - [Effective Java, finalizer, cleaner]
-date: 2021-04-01
-last_modified_at: 2021-04-01
+date: 2021-05-05
+last_modified_at: 2021-05-05
 ---
 # 람다보다는 메서드 참조를 사용하라
 
