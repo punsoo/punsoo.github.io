@@ -37,5 +37,5 @@ last_modified_at: 2021-04-03
 ***
 참고(Reference)  
 [what-is-the-most-effective-way-of-writing-a-factory-method](https://stackoverflow.com/questions/23126207/what-is-the-most-effective-way-of-writing-a-factory-method)  
-[[Java/자바] - Supplier<T> interface](https://m.blog.naver.com/zzang9ha/222087025042)  
-[[생성 패턴] 팩토리 패턴(Factory Pattern) 이해 및 예제](https://readystory.tistory.com/117)
+[Java/자바 - Supplier<T> interface](https://m.blog.naver.com/zzang9ha/222087025042)    
+[생성 패턴 팩토리 패턴(Factory Pattern) 이해 및 예제](https://readystory.tistory.com/117)
