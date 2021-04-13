@@ -10,7 +10,7 @@ defaults:
       share: true
       related: true
 
-title: "Effective Java Item 08"
+title: "Effective Java Item 11"
 excerpt: "equals는 일반 규약을 지켜 재정의하라"
 toc: true
 toc_sticky: true
@@ -44,3 +44,5 @@ if(!(o instanceof SmellPoint)) return o.equals(this);
 ***
 참고(Reference)  
 [Item 10. Equals는 일반 규약을 지켜 재정의하라](https://jaehun2841.github.io/2019/01/10/effective-java-item10/#%EB%A6%AC%EC%8A%A4%EC%BD%94%ED%94%84-%EC%B9%98%ED%99%98-%EC%9B%90%EC%B9%99-solid)  
+[Java HashMap은 어떻게 동작하는가?](https://d2.naver.com/helloworld/831311)  
+[해쉬 테이블의 이해와 구현 (Hashtable)](https://bcho.tistory.com/1072)
