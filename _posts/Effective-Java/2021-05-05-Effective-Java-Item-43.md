@@ -39,5 +39,5 @@ String::compareToIgnoreCase
 
 ***
 참고(Reference)  
-[Method References](https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html)
+[Method References](https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html)  
 [https://bit.ly/2uYQnbh](https://bit.ly/2uYQnbh)
