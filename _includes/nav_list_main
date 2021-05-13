@@ -31,11 +31,11 @@
             </ul>
       </li>
       <li>
-        <span class="nav__sub-title">클린 코드/객체 지향/디자인 패턴</span>
+        <span class="nav__sub-title">클린 코드</span>
             <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "Object Oriented" %}
-                        <li><a href="/categories/network" class="">객체 지향({{category[1].size}})</a></li>
+                        <li><a href="/categories/object-oriented" class="">객체 지향({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
