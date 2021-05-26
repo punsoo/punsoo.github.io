@@ -42,7 +42,7 @@ int dist[5][5][5], ans = 1e9;
 const int dx[] = { 1, -1, 0, 0, 0, 0 }, dy[] = { 0, 0, 1, -1, 0, 0 }, dz[] = { 0 ,0, 0, 0, 1, -1 };
 
 void bfs() {
-    if (!board[4][4][4]) return;
+    if (!board[0][0][0] || !board[4][4][4]) return;
     queue<maze> q;
     q.push({ 0, 0, 0 });
     memset(dist, -1, sizeof(dist));
