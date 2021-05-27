@@ -9,7 +9,7 @@ defaults:
       comments: true
       related: true
 
-title: "[BOJ] 보석 도둑"
+title: "[BOJ] Maaaaaaaaaze"
 excerpt: "[BOJ] Maaaaaaaaaze"
 toc: true
 toc_sticky: true
@@ -23,7 +23,7 @@ last_modified_at: 2021-05-26
 ---
 # [BOJ] Maaaaaaaaaze
 
-Problem URL : [보석 도둑](https://www.acmicpc.net/problem/16985)
+Problem URL : [Maaaaaaaaaze](https://www.acmicpc.net/problem/16985)
 
 ```cpp
 #include <iostream>
