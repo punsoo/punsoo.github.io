@@ -32,7 +32,6 @@ Problem URL : [방금그곡](https://programmers.co.kr/learn/courses/30/lessons/
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
-#include <iostream>
 
 using namespace std;
 
@@ -47,6 +46,7 @@ string convert(string s) {
     for (int i = 0; i < s.size(); i++) {
         if (s[i + 1] == '#') {
             ret += um[s.substr(i, 2)];
+            i++;
         } else {
             ret += s[i];
         }
@@ -69,16 +69,17 @@ string solution(string m, vector<string> musicinfos) {
     for (int i = 0; i < musicinfos.size(); i++) {
         string info = musicinfos[i];
 
-        vector<string> infos(4);
-        int idx = 0;
-        
+        vector<string> infos;
+        string token = "";
         for (int j = 0; j < info.size(); j++) {
             if (info[j] == ',') {
-                idx++;
+                infos.push_back(token);
+                token = "";
             } else {
-                infos[idx] += info[j];
+                token += info[j];
             }
         }
+        infos.push_back(token);
 
         int startTime = stoi(infos[0].substr(0, 2)) * 60 + stoi(infos[0].substr(3, 2));
         int endTime = stoi(infos[1].substr(0, 2)) * 60 + stoi(infos[1].substr(3, 2));
@@ -97,10 +98,9 @@ string solution(string m, vector<string> musicinfos) {
             infos[3] = infos[3].substr(0, time);
         }
 
-        cout << infos[3] << endl;
         musicLength = infos[3].size();
         
-        if (musicLength > listenLength) {
+        if (listenLength > musicLength) {
             continue;
         } else {
             if (infos[3].find(m) != string::npos) {
@@ -108,6 +108,11 @@ string solution(string m, vector<string> musicinfos) {
             }
         }
     }
+
+    if (ansList.empty()) {
+        return "(None)";
+    }
+
 
     stable_sort(ansList.begin(), ansList.end(), cmp);
     answer = ansList[0].first;
