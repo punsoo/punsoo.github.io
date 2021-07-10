@@ -26,6 +26,7 @@ last_modified_at: 2021-07-10
 
 Problem URL : [거리두기 확인하기](https://programmers.co.kr/learn/courses/30/lessons/81302?language=cpp)
 
+## 내 풀이
 
 ```cpp
 #include <string>
@@ -106,3 +107,64 @@ vector<int> solution(vector<vector<string>> places) {
     return answer;
 }
 ```
+
+## 모범 답안
+
+```cpp
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+bool is_valid_place(const vector<string>& place)
+{
+    constexpr size_t N = 5;
+
+    vector<vector<int>> is_in_use(
+        N,
+        vector<int>(N, false)
+    );
+
+    int di[] = {1,-1,0,0};
+    int dj[] = {0,0,1,-1};
+
+    for(size_t i=0; i!=N; ++i)
+        for(size_t j=0; j!=N; ++j)
+            if(place[i][j] == 'P'){
+                for(size_t k=0; k!=4; ++k){
+                    size_t moved_i = i + di[k];
+                    size_t moved_j = j + dj[k];
+
+                    if(moved_i >= N || moved_j >= N)
+                        continue;
+
+                    switch(place[moved_i][moved_j]){
+                        case 'P':
+                            return false;
+                        case 'O':
+                            if(is_in_use[moved_i][moved_j])
+                                return false;
+
+                            is_in_use[moved_i][moved_j] = true;
+                            break;
+                        case 'X':
+                            break;
+                    }
+                }
+            }
+
+    return true;
+}
+
+vector<int> solution(vector<vector<string>> places) {
+    vector<int> answer(5);
+    for(size_t i=0; i!=5; ++i)
+        answer[i] = is_valid_place(places[i]);
+    return answer;
+}
+```
+
+## Comments
+모범답안은 프로그래머스에서 fienestar님이 올려주신 풀이다.  
+정말 깔끔하다!
