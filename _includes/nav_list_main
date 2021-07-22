@@ -50,7 +50,7 @@
             <ul>
                 {% for category in site.categories %}
                     {% if category[0] == "TDD & Clean Code" %}
-                        <li><a style="font-size:17px" href="/categories/object-oriented" class="">TDD & 클린코드({{category[1].size}})</a></li>
+                        <li><a style="font-size:17px" href="/categories/tdd & clean-code" class="">TDD & 클린코드({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
