@@ -22,7 +22,7 @@
           	<ul>
                 {% for category in site.categories %}
                     {% if category[0] == "Spring" %}
-                        <li><a style="font-size:17px" href="/categories/effective-java" class="">Spring({{category[1].size}})</a></li>
+                        <li><a style="font-size:17px" href="/categories/spring" class="">Spring({{category[1].size}})</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
