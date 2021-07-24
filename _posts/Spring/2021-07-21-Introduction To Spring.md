@@ -352,7 +352,7 @@ JPA와 심지어 Querydsl로도 해결하기 어려운 쿼리는 JPA가 제공�
 
 
 
-### AOP
+## AOP
 
 AOP란 Aspect Oriendted Programming의 약자이다.
 
@@ -363,3 +363,5 @@ AOP란 Aspect Oriendted Programming의 약자이다.
 빈 등록은 역시나 @Component로 컴포넌트 스캔하거나 @Configuration 에서 @Bean으로 등록해준다.
 
 @Around 어노테이션으로 적용할 대상을 설정할 수 있다. (주로 패키지 레벨별로 설정한다.)
+
+실제 구현체 대신 가짜 구현체 (프록시)를 의존 관계 사이에 만들어 줌으로써 AOP를 구현한다.
