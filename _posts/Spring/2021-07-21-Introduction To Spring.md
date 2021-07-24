@@ -169,8 +169,197 @@ logback(실제 로그를 어떤 구현체로 출력하는 부분)
 
 이를 위해 afterEach() 나 beforeEach() 등을 이용하자 (ex. 공용 리포지토리를 초기화 해준다)
 
+예외처리 test는 assertThrows 를 이용해주자
+
 
 
 ### TDD란?
 
-[TDD](https://punsoo.github.io/tdd%20&%20clean%20code/TDD/)
+[TDD 링크](https://punsoo.github.io/tdd%20&%20clean%20code/TDD/)
+
+
+
+### given/when/then  패턴
+
+- given : 준비
+
+- when: 실행
+- then: 검증
+
+
+
+### Spring 통합 테스트
+
+@SpringBootTest, @Transactional 어노테이션을 활용해주자
+
+@SpringBootTest 
+
+스프링 컨테이너와 테스트를 함께 실행한다.
+
+@Transactional
+
+테스트 시작 전에 transaction 을 시작하고 테스트 완료 후에 항상 rollback을 해준다.
+
+@Commit 어노테이션을 달아준 메소드는 롤백하지 않고 커밋시켜준다.
+
+DB에 데이터가 남지 않으므로 다음 테스트에 영향을 주지 않는다.
+
+> Spring 통합 테스트가 좋지만, 순수 자바 코드로 하는 단위 테스트가 더 유용한 경우가 많다.
+>
+> 기능을 단위별로 쪼개서 테스트 하도록 단위 테스트 설계를 하자.
+
+
+
+
+
+
+
+## 스프링 Bean 등록 방법
+
+생성자에 @Autowired가 있으면 스프링이 연관된 객체를 스프링 컨테이너에서 찾아서 넣어준다.
+
+(생성자가 1개만 있으면 @Autowired는 생략할 수 있다.)
+
+객체 의존관계를 외부에서 넣어주기에 DI(Dependency Injection)이다.
+
+다만, 스프링이 의존관계를 넣어주려면, 넣어지는 대상이 스프링 Bean으로 등록되어 있어야 한다.
+
+스프링 Bean으로 등록하는 방법에는 2가지 방법이 있다. 
+
+(XML로 하는 방식도 있지만 최근에는 잘 사용하지 않는다.)
+
+>  참고: 스프링은 스프링 컨테이너에 스프링 Bean을 등록할 때, 기본으로 싱글톤으로 등록한다.
+>
+> 설정으로 싱글톤이 아니게 설정할 수 있지만, 특별한 경우를 제외하면 대부분 싱글톤을 사용한다.
+
+
+
+### 1. 컴포넌트 스캔 방법
+
+- @Component 애노테이션이 있으면 스프링 빈으로 자동 등록된다.
+- @Controller, @Service, @Repository  모두 @Component를 포함하기 때문에 컴포넌트 스캔이 된다.
+- 정형화된(일반적인) 컨트롤러, 서비스, 리포지토리 같은 코드는 컴포넌트 스캔을 사용한다.
+
+> 컴포넌트 스캔의 범위는 @SpringBootApplication 어노테이션이 붙은 클래스가 들어있는 패키지와 하위 패키지들이다.
+>
+> 설정으로 패키지 밖도 가능하기는 하다.
+
+
+
+### 2. 자바 코드로 직접 등록하기
+
+- @Configuration 어노테이션을 달은 클래스 안에서 @Bean 어노테이션을 달은 메소드를 통해 객체를 반환받음으로써 Bean으로 등록한다.
+- 정형화 되지 않거나 상황에 따라 구현 클래스를 변경해야 하면 설정을 통해(자바 코드로 직접) 스프링 빈을 등록한다.
+
+
+
+<br />
+
+> 동적으로 의존관계를 바꿔주는 것은 좋지 않다. 보통은 한번 세팅되고 나면, 되도록 바꾸지 않는다. 
+>
+> 등록한 Bean을 의존 주입 해주는 방법에는 생성자 주입 말고도 필드 주입, setter주입이 있다.
+>
+> 필드 주입, setter 주입은 생성 시점 이후에도 불필요한 변경의 가능성이 있을 뿐더러, 
+>
+> 객체 생성시점에는 순환참조가 일어나는지 아닌지 발견할 수 있는 방법이 없다.
+>
+> 반면에 생성자 주입은 순환참조가 생기면 오류를 띄워 사전에 방지해준다.
+>
+> 이외에도 생성자 주입은 Null Pointer Exception을 방지해주며 테스트를 용이하게 해준다.
+>
+> [링크1](https://yaboong.github.io/spring/2019/08/29/why-field-injection-is-bad/), [링크2](https://madplay.github.io/post/why-constructor-injection-is-better-than-field-injection), [링크3](https://interconnection.tistory.com/124) [링크4](https://mangkyu.tistory.com/125) [링크5](https://interconnection.tistory.com/124) [링크6](https://velog.io/@gillog/Spring-DIDependency-Injection-%EC%84%B8-%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95), [링크7](https://coding-start.tistory.com/250), [링크8](https://jurogrammer.tistory.com/79)
+
+
+
+## 스프링의 DI
+
+스프링의 DI(Dependencies Injection)을 사용하면 기존 코드를 전혀 손대지 않고, 설정만으로 구현 클래스를 변경할 수 있다.
+
+Spring은 통일된 인터페이스를 통해 구현체만 바꾸어서 코드를 확장하는 다형성을 활용하기 좋다.
+
+> 개방 폐쇄 원칙(OCP, Open-Closed Principle) 
+>
+> 확장에는 열려있고, 수정, 변경에는 닫혀있다.
+
+
+
+## JdbcTemplate
+
+템플릿 메소드 패턴을 내부적으로 사용한다.
+
+JDBC API에서 본 반복 코드를 대부분 제거해준다. 하지만 SQL은 직접 작성해야 한다.
+
+DataSource 빈을 주입받는다.
+
+> MyBatis 라이브러리와 비슷하다.
+
+
+
+## JPA
+
+- 기존의 반복 코드는 물론이고, 기본적인 SQL도 직접 만들어서 실행해준다.
+- 리포지토리에 구현 클래스 없이 인터페이스 만으로 개발을 완료할 수 있다.
+- SQL과 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있다.
+- 개발 생산성을 크게 높일 수 있다.
+- Spring에서의 관계형 데이터베이스는 JPA를 기본으로 한다고 보면 된다.
+- JPA란 것은 자바의 표준 인터페이스이고 구현체로 hibernate, eclipse 등의 벤더들이 있다 (주로 hibernate를 쓴다)
+
+
+
+application.properties 파일에서 spring.jpa.hibernate.ddl-auto = none (= create) 설정은 객체를 보고 테이블을 자동으로 생성해줄지를 선택한다.
+
+@Entity 어노테이션으로 (javax.persistence.Entity) JPA가 관리하는 entity가 된다.
+
+키가 될 필드를 @Id로 지정해주고 자바 코드로 직접 키값을 할당해주는 방식(직접 할당) 외에도 3가지 자동 생성 방식이 있다.
+
+자동 생성 방식에는 IDENTITY, SEQUENCE, TABLE 방식이 있고, @GeneratedValue(strategy=GenerationType.IDENTITY) 와 같은 형식으로 사용한다.
+
+- IDENTITY : 기본 키 생성을 데이터베이스에 위임한다.
+- SEQUENCE : 데이터베이스 시퀀스를 사용해서 기본 키를 할당한다.
+- TABLE : 키 생성 테이블을 사용한다.
+
+@Column 어노테이션으로 DB의 column이랑 Mapping 할 수 있다. (@Column(name = 컬럼명))
+
+SpringBoot가 property에서 세팅한 정보랑 DB 커넥션 정보 등등을 종합한 EntityManager를 만들어준다. JPA를 쓰려면 이 EntityManager를 주입받아야 한다.
+
+EntityManger는 원래 사양에 적혀있길 @PersistenceContext 어노테이션을 em에 달아주어야 하지만, 생성자 주입 (@Autowired)만으로도 Spring에서 알아서 주입해준다.
+
+항상 @Transactional 어노테이션이 필요하다.
+
+트래픽이 큰 실무 현장에서도 잘 활용되고 있다.
+
+복잡한 동적 쿼리는 Querydsl 이라는 라이브러리를 사용하면 된다.
+
+Querydsl을 사용하면 쿼리도 자바 코드로 안전하게 작성할 수 있고, 동적 쿼리도 편리하게 작성할 수 있다.
+
+JPA와 심지어 Querydsl로도 해결하기 어려운 쿼리는 JPA가 제공하는 네이티브 쿼리를 사용하거나, JdbcTemplate을 사용하면 된다.
+
+
+
+>  pk기반으로 쿼리할 때는 쿼리문을 작성할 필요도 없다.
+>
+> 그 외에는 jpql이라는 객체지향 쿼리언어를 통해 테이블 대신 객체 자체를 대상으로 쿼리를 날린다.(내부적으로 sql로 번역된다)
+>
+> JPA 기술을 Spring으로 한번 감싸서 제공해주는 기술(SpringDataJPA)을 통해 pk 기반이 아닌 경우에도 쿼리문을 작성하지 않는다!
+>
+> 다시말해, 기본적인 CRUD는 제공되어진다. (인터페이스 이름을 수정해주기만 하면 된다!)
+>
+> (내부적으로 메소드 이름을 리플렉션으로 읽어들여서 동작한다)
+>
+> 또한 페이징 기능도 자동으로 제공한다.
+>
+> SpringDataJPA는 import org.springfraemework.data.jpa.repository.JpaRepository 를 통해 인터페이스 대한 구현체를 스스로 만들어준다. 그리고 구현체를 자동으로 빈으로 등록해준다.
+
+
+
+### AOP
+
+AOP란 Aspect Oriendted Programming의 약자이다.
+
+공통 관심 사항(cross-cutting concern)과 핵심관심 사항(core concern)을 분리한다.
+
+@Aspect 어노테이션을 달아줌으로서 AOP클래스를 만들어준다. 
+
+빈 등록은 역시나 @Component로 컴포넌트 스캔하거나 @Configuration 에서 @Bean으로 등록해준다.
+
+@Around 어노테이션으로 적용할 대상을 설정할 수 있다. (주로 패키지 레벨별로 설정한다.)
