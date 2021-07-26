@@ -26,7 +26,7 @@ last_modified_at: 2021-07-26
 
 Problem URL : [순위 검색](https://programmers.co.kr/learn/courses/30/lessons/72412?language=python3)
 
-```cpp
+```python
 from itertools import combinations as comb
 from collections import defaultdict
 
