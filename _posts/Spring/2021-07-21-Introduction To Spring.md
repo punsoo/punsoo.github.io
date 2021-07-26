@@ -365,3 +365,10 @@ AOP란 Aspect Oriendted Programming의 약자이다.
 @Around 어노테이션으로 적용할 대상을 설정할 수 있다. (주로 패키지 레벨별로 설정한다.)
 
 실제 구현체 대신 가짜 구현체 (프록시)를 의존 관계 사이에 만들어 줌으로써 AOP를 구현한다.
+
+
+
+## Reference
+
+이 글은 김영한님의 [스프링 입문 - 코드로 배우는 스프링 부트, 웹 MVC, DB 접근 기술](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EC%9E%85%EB%AC%B8-%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8/dashboard)을 보고 정리하였습니다.
+
