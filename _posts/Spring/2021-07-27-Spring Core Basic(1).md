@@ -173,7 +173,37 @@ public class MemberService  {
 >
 > 김영한 선생님은 변경 가능성이 없는 것은 바로 구체 클래스를 직접 사용하고, 향후 꼭 필요할 때 리팩토링을 통해 인터페이스를 도입하는 것을 추천하신다.
 
+
+
+## 스프링 예제
+
+### ConcurrentHashMap
+
+HashMap은 멀티스레드 환경에서 동시성을 보장할 수 없고, SynchronizedMap은 속도가 떨어진다.
+
+속도도 보장하면서 동시성을 보장하는 자료구조가 ConcurrentHashMap이다.
+
+CocurrentHashMap이 내부적으로 사용하는 방식은 다음과 같다.
+
+- [Compare and Swap](http://tutorials.jenkov.com/java-concurrency/compare-and-swap.html) 방식 (빈 버킷으로의 노드 삽입)
+- 부분적인 lock 으로 스레드 경합 최소화 (버킷의 첫번째 노드 기준)
+- 버킷 단위로 lock을 사용하여 버킷의 수 == 동시작업 가능한 쓰레드 수이다
+  - 여러 쓰레드에서 삽입, 참조하더라도 그 데이터가 다른 세그먼트에 위치하면 서로 락을 얻기 위해 경쟁하지 않는다.([참고](https://devlog-wjdrbs96.tistory.com/269))
+- volatile로 구현된 Node
+
+>  [링크](https://pplenty.tistory.com/17)가 잘 정리되어 있어서 공부했지만 그럼에도 이해가 안되는 부분이 많다. 라이브러리 이해하기는 쉬운 일이 아니구나...
+
+
+
 ## Reference
 
 이 글은 김영한님의 [스프링 핵심 원리 - 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/dashboard)을 보고 정리하였습니다.
+
+[1] [[java] ConcurrentHashMap 동기화 방식](https://pplenty.tistory.com/17)
+
+[2] [[Java] ConcurrentHashMap이란 무엇일까?](https://devlog-wjdrbs96.tistory.com/269)
+
+[3] [동시성에 대해서 생각해보자.](https://happy-coding-day.tistory.com/151)
+
+[4] [자바 volatile 키워드](https://parkcheolu.tistory.com/16)[](https://parkcheolu.tistory.com/16)
 
