@@ -181,7 +181,7 @@ public class MemberService  {
 
 HashMap은 멀티스레드 환경에서 동시성을 보장할 수 없고, SynchronizedMap은 속도가 떨어진다.
 
-속도도 보장하면서 동시성을 보장하는 자료구조가 ConcurrentHashMap이다.
+실무에서는 속도도 보장하면서 동시성을 보장하는 자료구조가 ConcurrentHashMap가 쓰인다.
 
 CocurrentHashMap이 내부적으로 사용하는 방식은 다음과 같다.
 
@@ -192,6 +192,111 @@ CocurrentHashMap이 내부적으로 사용하는 방식은 다음과 같다.
 - volatile로 구현된 Node
 
 >  [링크](https://pplenty.tistory.com/17)가 잘 정리되어 있어서 공부했지만 그럼에도 이해가 안되는 부분이 많다. 라이브러리 이해하기는 쉬운 일이 아니구나...
+
+### 인터페이스명 + Impl
+
+인터페이스의 구현체가 하나만 있을 때는 관례상 인터페이스 이름에 Impl을 붙여 작명한다.
+
+### OCP, DIP 위반
+
+우선 객체지향적으로 구현하기 위해 노력한 점을 살펴보자.
+
+- 코드가 전체적으로 역할(인터페이스), 구현(구체 클래스)로 잘 나뉘어졌다.
+  - 역할(인터페이스) : MemberService, MemberRepository, OrderService, DiscountPolicy 
+  - 구현(구체 클래스) : MemberServiceImpl, MemopryMemberRepository, OrderServiceImpl, FixDiscountPolicy, RateDiscountPolicy
+- 다형성을 활용하였다.
+
+그렇다면 뭐가 문제일까? OrderServiceImpl 에서 할인 정책을 바꾼다고 생각해보자.
+
+```java
+public class OrderServiceImpl implements OrderService {
+// private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
+}
+```
+
+OrderService에서 코드의 변경이 일어났다! OCP 원칙을 위반한 것이다.
+
+게다가 OrderService에서는 FixDiscountPolicy랑 RateDiscountPolicy의 존재를 알고 있어야 한다. 즉 의존관계이다.
+
+역할(인터페이스)에만 의존해야한다는 DIP 원칙까지 위반하고 있었던 것이다.
+
+MemberSerivceImpl 에서의 상황도 마찬가지이다.
+
+```java
+public class MemberServiceImpl implements MemberService {
+    private MemberRepository memberRepository = new MemoryMemberRepository(); // 구체 클레스에 의존하고 있다.
+}
+```
+
+그렇다면 인터페이스에만 의존하도록 만들고 싶은데, 어떻게 해야할까? 
+
+외부에서 구현 객체를 대신 생성하고 주입해주면 된다! 이를 의존성 주입(DI : dependency Injection)이라고 부른다.
+
+### 책임 분리
+
+구현 객체를 생성하고, 연결(주입)하는 책임을 하는 클래스 AppConfig 를 하나 만들자
+
+```java
+public class AppConfig {
+    public MemberService memberService() {
+    	return new MemberServiceImpl(new MemoryMemberRepository());
+    }
+    public OrderService orderService() {
+	    return new OrderServiceImpl(new MemoryMemberRepository(),new FixDiscountPolicy());
+    }
+}
+```
+
+MemberServiceImpl, OrderServiceImpl 에서 더 이상 구체 클래스에 의존하지 않고 생성자를 통해 주입 받을 수 있다.
+
+```java
+public class MemberServiceImpl implements MemberService {
+    private final MemberRepository memberRepository;
+
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+}
+```
+
+
+
+```java
+public class OrderServiceImpl implements OrderService{
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy;
+
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+}
+```
+
+### 역할과 구현을 좀더 명료하게 구분하도록 AppConfig를 리팩토링 할 수 있다.
+
+```java
+public class AppConfig {
+    public MemberService memberService() {
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    private MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+
+    public OrderService orderService() {
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
+    }
+
+    public DiscountPolicy discountPolicy() {
+        return new FixDiscountPolicy();
+    }
+}
+```
+
+new MemoryMemberRepository() 중복도 없애고, 역할별 구현 클래스가 더 쉽게 읽힌다.
 
 
 
