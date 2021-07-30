@@ -10,8 +10,8 @@ defaults:
       share: true
       related: true
 
-title: "Spring Core Basic(1)"
-excerpt: "스프링 핵심 기본(1)"
+title: "Spring Core Basic_1"
+excerpt: "스프링 핵심 기본_1"
 toc: true
 toc_sticky: true
 toc_label: "목차"
@@ -20,7 +20,7 @@ categories:
 tags:
   - [Spring, 김영한, 스프링 핵심 기본]
 date: 2021-07-27
-last_modified_at: 2021-07-27
+last_modified_at: 2021-07-31
 ---
 
 ## 스프링의 탄생 배경
