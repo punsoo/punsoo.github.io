@@ -296,13 +296,55 @@ public class AppConfig {
 }
 ```
 
-new MemoryMemberRepository() 중복도 없애고, 역할별 구현 클래스가 더 쉽게 읽힌다.
+new MemoryMemberRepository() 중복도 없애고, 메소드 이름으로 역할이 분명하게 구분되어지기 때문에 역할과 구현이 명료하게 구분된다.
+
+### IoC (Inversion of Control: 제어의 역전)
+
+IoC란 객체의 생성, 생명주기의 관리까지 모든 객체에 대한 제어권이 바뀌었다는 것을 의미한다.
+
+- 클라이언트 구현 객체(OrderServiceImpl, MemberServiceImpl)가 가지고 있던 제어권을 AppConfig로 옮겨주었다.
+- 클라이언트 구현 객체들은 자신의 로직만 실행할 뿐, 호출하는 인터페이스를 통해 어떤 구현 객체들(MemberServiceImpl, MemopryMemberRepository, OrderServiceImpl 등)이 생성되고 실행될지 모른다.
+- 이렇게 프로그램의 제어 흐름을 직접 제어하는 것이 아니라 외부에서 관리하는 것을 제어의 역전(IOC)이라고 한다.
 
 
+
+### 프레임워크 vs 라이브러리
+
+- 내가 작성한 코드를 제어하고, 대신 실행하면 프레임워크이다 (JUnit)
+- 내가 작성한 코드를 직접 제어한다면, 라이브러리이다.
+
+
+
+### 의존관계 주입 (DI: Denpendency Injection)
+
+- 정적인 클래스 의존관계 
+  - import 코드만 보고도 의존관계 파악이 가능하다.(실행이 필요없다!)
+  - 하지만 이러한 클래스 의존관계만으로는 실제 어떤 구현 객체가 클라이언트 구현 객체에서 사용될지 알 수 없다.
+- 동적인 객체 인스턴스 의존 관계
+  - 애플리케이션 실행 시점(런타임)에 실제 생성된 객체 인스턴스의 참조가 연결된 의존 관계이다.
+  - 클라이언트 구현 객체(OrderServiceImpl, MemberServiceImpl)의 외부에서 실제 구현 객체(MemberServiceImpl, MemopryMemberRepository, OrderServiceImpl 등)를 생성하고 클라이언트에 전달하여 실제 의존 관계가 연결 되는 것을 의존 관계 주입(DI)라고 한다.
+- DI를 사용하면 정적인 클래스 의존관계는 변경하지 않은채, 동적인 객체 인스턴스 의존관계를 쉽게 변경할 수 있다.
+- DI를 사용하면 클라이언트 코드를 변경하지 않고 호출하는 대상의 타입 인스턴스를 변경할 수 있다.
+
+### IOC 컨테이너, DI 컨테이너
+
+- AppConfig 처럼 객체를 생성하고 관리하면서 의존관계를 연결해주는 것을 'IoC 컨테이너' 또는 'DI 컨테이너' 라고 한다.
+
+- 최근에는 의존관계 주입에 초점을 맞춰 주로 DI 컨테이너라 한다.
+- 어셈블러, 오브젝트 팩토리 등으로 불리기도 한다.
+
+### 스프링 컨테이너
+
+- ApplicationContext 가 스프링 컨테이너이다
+- 스프링 컨테이너는 @Configuration이 붙은 클래스(AppConfig)를 설정(구성) 정보로 사용한다.
+- AppConfig에서 @Bean이라 붙은 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너 등록한다. 
+- 스프링 컨테이너에 등록된 객체를 스프링 빈이라고 한다.
+- 스프링 빈은 기본적으로 메서드의 명을 이름으로 사용하지만, @Bean(name = "beanName") 과 같이 따로 설정해 줄 수 있다.
+- 개발자는 스프링 컨테이너의 getBean() 메서드를 통해서 필요한 스프링 빈(객체)을 찾을 수 있다.
 
 ## Reference
 
-이 글은 김영한님의 [스프링 핵심 원리 - 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/dashboard)을 보고 정리하였습니다.
+이 글은 김영한님의 [스프링 핵심 원리 - 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/dashboard)을 보고 정리해서 작성하였습니다.
 
 [1] [[java] ConcurrentHashMap 동기화 방식](https://pplenty.tistory.com/17)
 
