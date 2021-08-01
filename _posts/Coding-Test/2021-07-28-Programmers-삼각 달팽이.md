@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, Programmers, dfs, 구현]
+  - [Coding Test, Programmers, DFS, 구현]
 date: 2021-07-28
 last_modified_at: 2021-07-28
 ---
