@@ -20,7 +20,7 @@ categories:
 tags:
   - [Spring, 김영한, 스프링 핵심 기본]
 date: 2021-08-03
-last_modified_at: 2021-08-03
+last_modified_at: 2021-08-08
 ---
 
 ## 스프링 컨테이너
@@ -195,17 +195,208 @@ for (String beanDefinitionName : beanDefinitionNames) {
 - 매 요청마다 객체를 새로 생성하면 메모리 낭비가 심하다.
 - 객체를 1개만 생성해서 공유하면 해결할 수 있다. (싱글톤 패턴)
 
+
+
 ### 싱글톤 패턴 문제점
 
 - 구현 코드량이 많다
-- 구체 클래스에 의존해서 DIP,  OCP를 위반한다. [(참고 링크)](https://juns-lee.tistory.com/entry/SpringFramework%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%B1%EA%B8%80%ED%86%A4-%EC%A0%84%EB%9E%B5)
+- 구체 클래스에 의존해서 DIP,  OCP를 위반한다. (구체클래스. getInstance() 이런 식으로) [(참고 링크)](https://juns-lee.tistory.com/entry/SpringFramework%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%B1%EA%B8%80%ED%86%A4-%EC%A0%84%EB%9E%B5)
 - 테스트가 어렵다. [(참고 링크)](https://punsoo.github.io/effective%20java/Effective-Java-Item-03/)
 - 내부 속성을 변경하거나 초기화 하기 어렵다
 - private 생성자로 자식 클래스를 만들기 어렵다.
 - 유연성이 떨어진다.
 - 안티패턴이다.
 
-## Reference
+
+
+### 스프링 컨테이너의 싱글톤 (싱글톤 컨테이너)
+
+스프링 컨테이너는 싱글톤 패턴의 문제점은 해결하면서 장점은 유지한다.
+
+- 지저분한 코드가 필요없다
+- DIP,OCP를 위반하지 않으고 테스트가 용이하며 private 생성자로부터 자유롭다.
+
+싱글톤 객체를 생성하고 관리하는 기능(싱글톤 레지스트리)를 가지고 있다.
+
+
+
+### 싱글톤 방식의 주의점
+
+- 싱글톤 방식은 여러 클라이언트에 공유되기 때문에 상태를 유지(stateful)하게 설계하면 안된다.
+- 무상태(stateless)로 설계해야 한다.
+  - 특정 클라이언트에 의존적인 필드가 있으면 안된다.
+  - 특정 클라이언트가 값을 변경할 수 있는 필드가 있으면 안된다.
+  - 가급적 읽기만 가능해야 한다.
+  - 필드 대신에 자바에서 굥유되지 않는 지역변수, 파라미터, ThreadLocal 등을 사용해야 한다.
+- 스프링 빈의 필드에 공유 값을 설정하면 정말 큰 장애가 발생할 수 있다.
+
+
+
+### @Configuration
+
+@Configuration은  스프링 컨테이너가 싱글톤 레지스트이도록 만들어준다.
+
+- @Configuration 어노테이션을 붙이면, 스프링이 CGLIB이라는 바이트코드 조작 라이브러리를 사용해서 AppConfig 를 상속받은 임의의 다른 클래스를 빈으로 등록한다.
+- 그 임의의 다른 클래스가 싱글톤이 보장되도록 해준다.
+- @Configuration이 없으면, 매번 새로 인스턴스가 생성되고 (new MemoryMemberREpository()), 이 인스턴스들은 스프링 컨테이너로 관리되는 빈도 아니다.
+- `@Autowired MemberRepository memberRepository;` 이런식으로 @Autowired를 사용하여 의존관계 주입을 구현할 수도 있다.
+- 스프링 설정 정보는 항상 `@Configuration`을 사용하자.
+
+
+
+## 컴포넌트 스캔
+
+@Bean이나 XML의 <Bean> 으로 빈을 등록하다보면, 빈의 숫자가 많아질수록 설정 정보가 커진다.
+
+그리고 그에 따라 누락하는 문제와 반복이 발생한다.
+
+그래서 스프링은 설정 정보가 없어도 자동으로 스프링 빈을 등록하는 컴포넌트 스캔이라는 기능을 제공한다.
+
+또 의존관계도 자동으로 주입하는 `@Autowired` 라는 기능도 제공한다.
+
+컴포넌트 스캔을 사용하려면 @ComponentScan을 @Configuration과 함께 설정 정보에 붙여주면 된다.
+
+그러면 @Component 애노테이션이 붙은 클래스들을 스캔해서 빈으로 등록한다.
+
+> excludeFilters를 이용해서 컴포넌트 스캔 대상에서 제외할 수 있다.
+>
+> ```java
+> @ComponentScan(excludeFilter = @Filter(type = FilterType.ANNOTATION, classes= Configuration.class))
+> ```
+
+@Bean으로 직접 설정 정보를 작성했을 때는, 의존 관계가 메소드 안에서 명시되었지만,
+
+@ComponentScan의 경우에는 @Autowired로 의존관계를 자동으로 주입해준다. (생성자나 Setter, 필드에 붙인다. 주로 생성자에!)
+
+컴포넌트 스캔을 할 때, @Component가 붙은 클래스의 클래스명을 기본 빈의 이름으로 사용하되, 맨 앞글자만 소문자를 사용한다.
+
+- 기본 빈 이름 : RateDiscountPolicy -> rateDiscountPolicy
+- 빈 이름 직접 지정: @Component("rateDiscountPolicy2") 이런 식으로 직접 이름을 부여할 수도 있다.
+
+
+
+### 탐색 위치와 기본 스캔 대상
+
+```java
+@ComponentScan(
+    basePackages = "hello.core.member",
+    basePackageClasses = AutoAppConfig.class,
+    excludeFilter = @Filter(type = FilterType.ANNOTATION, classes= Configuration.class)
+)
+```
+
+- basePackages : 탐색할 패키지의 시작 위치를 지정한다. 이 패키지를 포함해서 하위 패키지를 모두 탐색한다.
+
+  - ```java
+    basePackages ={"hello.core", "hello.service"}
+    ```
+
+    이렇게 여러 패키지의 시작위치를 지정할 수도 있다.
+
+- basePackageClasses: 지정한 클래스의 패키지를 탐색 시작 위치로 지정한다.
+
+- 아무것도 지정하지 않으면 @ComponentScan이 붙은 설정 정보 클래스의 패키지가 시작 위치가 된다.
+
+  - 이런 성질을 활용하여, 아무것도 지정하지 않고 정 정보 클래스의 위치를 프로젝트 최상단에 두는 것이 권장된다.
+  - 프로젝트 메인 설정 정보는 프로젝트를 대표하는 정보이기 때문이라도 프로젝트 시작 루트 위치에 두는 것이 좋다고 여겨진다.
+  - 스프링 부트의 대표 시작 정보인 @SpringBootApplication를 이 프로젝트 시작 루트 위치에 두는 것이 관례이다.
+  - @SpringBootApplication 안에 @ComponentScan이 들어있다.
+
+- 컴포넌트 스캔은 @Component 뿐만 아니라 다음 어노테이션들에도 포함되어있다. (해당 클래스의 소스 코드를 살펴보자)
+
+  - @Controller: 스프링 MVC 컨트롤러로 인식
+  - @Service:
+    - 스프링 비즈니스 로직에서 사용하는데 사실 @Service는 특별한 처리를 하지 않는다.
+    - 대신 개발자들이 핵심 비즈니스 로직이 여기에 있겠구나 라고 비즈니스 계층을 인식하는데 도움이 된다.
+  - @Repository: 스프링 데이터 접근 계층으로 인식하고, 데이터 계층의 예외를 추상화하여 스프링 예외로 변환해준다.
+  - @Configuration: 스프링 설정 정보로 인식하고, 스프링 빈이 싱글톤을 유지하도록 추가 처리를 한다.
+
+- 애노테이션에는 상속관계라는 것이 사실 없다. 이렇게 애노테이션이 특정 애노테이션을 들고 있는 것을 인식할 수 있는 것은 자바 언어가 지원하는 기능이 아니고, 스프링이 지원하는 기능이다.
+
+### 필터
+
+```java
+package hello.core.scan.filter;
+
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE) //ElementType.TYPE: 클래스 레벨에 붙는다는 뜻
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface MyExcludeComponent {
+}
+```
+
+이런 식으로 애노테이션을 만들어 줄 수 있다.
+
+```java
+@ComponentScan(
+            includeFilters = @Filter(type = FilterType.ANNOTATION, classes = MyIncludeComponent.class),
+            excludeFilters = @Filter(type = FilterType.ANNOTATION, classes = MyExcludeComponent.class)
+)
+```
+
+이렇게 빈으로 등록할 클래스와 등록하지 않을 클래스를 지정할 수 있다.
+
+### 필터 옵션 (FilterType의 5가지 옵션)
+
+- ANNOTATION: 기본값, 애노테이션을 인식해서 동작
+- ASSIGNABLE_TYPE: 지정한 타입과 자식 타입을 인식해서 동작한다.
+- ASPECTJ: AspectJ 패턴 사용
+- REGEX: 정규 표현식
+- CUSTOM: TypeFilter 라는 인터페이스를 구현해서 처리
+
+> @Component로 충분해서 includeFilters는 거의 사용하지 않는다.
+>
+> excludeFilters는 가끔 사용한다.
+>
+> 최근 스프링 부트는 컴포넌트 스캔을 기본으로 제공하기에, 옵션을 변경하여서 사용하기보다 스프링의 기본 설정에 최대한 맞추어 사용하는 것을 권장한다.
+
+
+
+### 중복 등록과 충돌
+
+- 자동 빈 등록 vs 자동 빈 등록 충돌은 에러가 난다.
+
+  - ```java
+    예를들어 @Component("service") 를 두개의 클래스에 붙여줬을 때
+    ```
+
+- 수동 빈 등록 vs 자동 빈 등록 충돌은 수동 빈 등록이 우선권을 가진다.(수동 빈이 자동 빈을 오버라이딩 해버린다.)
+
+  - ```java
+    @Bean(name = "memoryMemberService") 로 등록하여 자동 빈 등록과 겹칠 때
+    ```
+
+  - 이 때 다음과 같은 로그를 남겨준다.
+
+    - ```text
+      Overriding bean definition for bean '클래스이름' with a different definition: replacing
+      ```
+
+  - 테스트 코드를 통해 Spring을 돌리면 이와 같이 되지만 스프링 부트에서는 오류를 낸다.
+
+  - 위와 같은 결과는(오버라이딩 하는 결과는) 개발자가 의도하지 않고 발생할 수도 있고, 이럴 경우 정말 잡기 어려운 버그가 된다.
+
+  - 그래서 최근 스프링부트는 오류가 나도록 기본 설정 값을 바꾸어 주었다.
+
+    - ```text
+      Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+      ```
+
+  - 스프링 부트에서도 오버라이딩 하게 바꾸고 싶다면, resources/application.properties에 다음과 같은 설정을 적어준다.
+
+    - ```text
+      spring.main.allow-bean-definiton-verriding=true
+      ```
+
+  - 개발할 때는 명확하지 않은 것은(애매한 것은) 최대한 피하자! 개발은 혼자 하는 것이 아니다.
+
+    어설픈 추상화는 잡기 어려운 버그가 된다.
+
+
+
+- Reference
 
 이 글은 김영한님의 [스프링 핵심 원리 - 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/dashboard)을 보고 정리해서 작성하였습니다.
 
