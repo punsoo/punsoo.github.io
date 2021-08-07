@@ -59,13 +59,77 @@ last_modified_at: 2021-08-03
     - XML 은 GenericXmlApplicationContext의 XmlBeanDefinitionReader를 통해 appConfig.xml 설정 정보를 읽고 BeanDefinition을 생성한다.
     - 자바코드(Annotation) 방식은 AnnotationConfigApplicationContext의 AnnotatedBeanDefinionReader를 통해 appConfig.class 를 읽고 BeanDefiniton을 생성한다.
   - BeanDefinition 정보
-    - BeanClassName: 생성할 빈의 클래스 명(자바 설정처럼 팩토리 역할의 빈을 사용하면 없음(null))
-    - factoryBeanName: 팩토리 역할의 빈을 사용할 경우 ex) appConfig
-    - factoryMethodName: 빈을 생성할 팩토리 메서드 ex)memberService
-    - Scope: 싱글톤(기본값)
+    - BeanClassName: 생성할 빈의 클래스 명( 자바 설정처럼 팩토리 역할의 빈을 사용하면 없음(null) )
+      - xml 경우에는 hello.core.member.MemberServiceImpl 와 같이 클래스 명이 구체적으로 들어있다.
+      
+    - factoryBeanName: 팩토리 역할의 빈을 사용할 경우(자바 코드(Annotation)방식으로 등록하는 경우) ex) appConfig
+
+    - factoryMethodName: 빈을 생성할 팩토리 메서드 ex)memberService, memberRepository, orderService, discountPolicy
+
+    - Scope: 빈 스코프란 빈이 사용되는(존재할 수 있는) 범위를 말한다. 
+
+       @Scope 어노테이션 (ex : @Scope(value = "prototype") )을 사용해서 빈 스코프를 정의해 줄 수 있다.
+
+      xml에서는 <bean ... scope ="prototype"> 이런 식으로 정의한다.
+
+      [(참고 링크1)](https://juns-lee.tistory.com/entry/SpringFramework%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%B1%EA%B8%80%ED%86%A4-%EC%A0%84%EB%9E%B5) [(참고 링크2)](https://velog.io/@probsno/Bean-%EC%8A%A4%EC%BD%94%ED%94%84%EB%9E%80) [(참고 링크3)](https://gmlwjd9405.github.io/2018/11/10/spring-beans.html) [(참고 링크4)](https://mangkyu.tistory.com/117) [(참고 링크5)](https://cantcoding.tistory.com/47)
+
+      - singleton P: 기본 스코프, 스프링 컨테이너의 시작과 죵료까지 유지되는 가장 넓은 범위의 스코프
+
+      - prototype:
+
+        - 빈의 생성과 의존관계 주입까지만 관여하고 더는 관리하지 않는 매우 짧은 범위의 스코프
+        - 하나의 빈 정의에 대해서 다수의 객체가 존재할 수 있음
+        - 요청이 오면 항상 새로운 인스턴스를 생성하여 반환하고 이후에 관리하지 않음
+        - 빈을 받은 클라이언트가 빈을 관리해야 함
+
+      - request: 일반 Spring 애플리케이션이 아닌 Spring MVC Application 에서만 제공
+
+        - Web-aware Spirng ApplicaitonContext 안에서만 유효
+        - 각각의 HTTP 요청별로 인스턴스화 되며 요청이 끝날 때까지 유지되는 스코프
+        - 각각의 HTTP 요청마다 별도의 빈 인스턴스가 생성되고 관리됨.
+
+      - session: 일반 Spring 애플리케이션이 아닌 Spring MVC Application 에서만 제공
+
+        - Web-aware Spirng ApplicaitonContext 안에서만 유효
+        - 하나의 Bean 정의에 대해서 하나의 HTTP Session의 생명 주기 안에 단 하나의 객체만 존재
+        - HTTP Session 과 동일한 생명주기를 가지는 스코프
+        - HTTP Session 별로 인스턴스화 되고 세션이 끝나면 소멸됨
+
+      - global session: 일반 Spring 애플리케이션이 아닌 Spring MVC Application 에서만 제공
+
+        - Web-aware Spirng ApplicaitonContext 안에서만 유효
+        - 하나의 Bean 정의에 대해서 하나의 global HTTP Session의 생명주기 안에 단 하나의 객체만 존재
+        - 일반적으로 portlet context 안에서 유효
+        - [포틀릿](http://daplus.net/java-%ED%8F%AC%ED%8B%80%EB%A6%BF%EA%B3%BC-%EC%84%9C%EB%B8%94%EB%A6%BF%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C/) 스펙은 하나의 포틀릿 웹 응용 프로그램을 구성하는 모든 포틀릿들 사이에서 공유되는 글로벌 세션의 개념을 정의한다. 
+
+      - application: 일반 Spring 애플리케이션이 아닌 Spring MVC Application 에서만 제공
+
+        - Web-aware Spirng ApplicaitonContext 안에서만 유효
+        - 웹의 서블릿 컨텍스트(ServeletContext)와 같은 범위로 유지되는(동일한 생명주기를 가지는) 스코프
+
+      - websocket: 일반 Spring 애플리케이션이 아닌 Spring MVC Application 에서만 제공
+
+        - Web-aware Spirng ApplicaitonContext 안에서만 유효
+        - 웹 소켓과 동일한 생명주기를 가지는 스코프
+
+      - thread:
+
+        - 새 스레드에서 요청하면 새로운 인스턴스 생성
+        - 같은 스레드의 요청에는 항상 같은 인스턴스가 반환됨
+
+      - custom:
+
+        - org.springframewrok.beans.factory.confgi.Scope 를 구현하여 커스텀 스코프를 스프링 설정에 등록하여 사용
+
+        
+
     - lazyInit: 스프링 컨테이너를 생성할 때 빈을 생성하는 것이 아니라, 실제 빈을 사용할 때까지 최대한 생성을 지연처리 하는지 여부
+
     - InitMethodName: 빈을 생성하고, 의존관계를 적용한 뒤에 호출되는 초기화 메서드 명
+
     - DestoryMethodName: 빈의 생명주기가 끝나서 제거하기 직전에 호출되는 메서드 명
+
     - Constructor arguments, Properties: 의존관계 주입에서 사용한다. (자바 설정처럼 팩토리 역할의 빈을 사용하면 없음)
 
 ### 스프링 컨테이너의 생성 과정
@@ -124,6 +188,23 @@ for (String beanDefinitionName : beanDefinitionNames) {
 
 부모 타입으로 조회하면, 자식 타입을 포함하여 조회한다.
 
+
+
+## 싱글톤 컨테이너
+
+- 매 요청마다 객체를 새로 생성하면 메모리 낭비가 심하다.
+- 객체를 1개만 생성해서 공유하면 해결할 수 있다. (싱글톤 패턴)
+
+### 싱글톤 패턴 문제점
+
+- 구현 코드량이 많다
+- 구체 클래스에 의존해서 DIP,  OCP를 위반한다. [(참고 링크)](https://juns-lee.tistory.com/entry/SpringFramework%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%B1%EA%B8%80%ED%86%A4-%EC%A0%84%EB%9E%B5)
+- 테스트가 어렵다. [(참고 링크)](https://punsoo.github.io/effective%20java/Effective-Java-Item-03/)
+- 내부 속성을 변경하거나 초기화 하기 어렵다
+- private 생성자로 자식 클래스를 만들기 어렵다.
+- 유연성이 떨어진다.
+- 안티패턴이다.
+
 ## Reference
 
 이 글은 김영한님의 [스프링 핵심 원리 - 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8/dashboard)을 보고 정리해서 작성하였습니다.
@@ -134,3 +215,16 @@ for (String beanDefinitionName : beanDefinitionNames) {
 
 [3] [스프링 컨테이너(Spring Container)를 만드는 2가지 방법 (XML, Annotation) 출처](https://ktrlnr.tistory.com/entry/%EC%8A%A4%ED%94%84%EB%A7%81-%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88Spring-Container%EB%A5%BC-%EB%A7%8C%EB%93%9C%EB%8A%94-2%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-XML-Annotation)
 
+[4] [SpringFramework에서의 싱글톤 전략](https://juns-lee.tistory.com/entry/SpringFramework%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%B1%EA%B8%80%ED%86%A4-%EC%A0%84%EB%9E%B5)
+
+[5] [[Spring] Spring Bean의 개념과 Bean Scope 종류](https://gmlwjd9405.github.io/2018/11/10/spring-beans.html)
+
+[6] [[Spring] Bean Scope(빈 스코프)의 종류](https://mangkyu.tistory.com/117)
+
+[7] [Bean 스코프란?](https://velog.io/@probsno/Bean-%EC%8A%A4%EC%BD%94%ED%94%84%EB%9E%80)
+
+[8] [스프링 Bean,Singleton,Bean Scope](https://cantcoding.tistory.com/47)
+
+[9] [[java] 포틀릿과 서블릿의 차이점은 무엇입니까?](http://daplus.net/java-%ED%8F%AC%ED%8B%80%EB%A6%BF%EA%B3%BC-%EC%84%9C%EB%B8%94%EB%A6%BF%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C/)
+
+[10] [[[Spring\] Spring Bean Scope 종류](https://charming-jung.tistory.com/54)](https://charming-jung.tistory.com/54)
