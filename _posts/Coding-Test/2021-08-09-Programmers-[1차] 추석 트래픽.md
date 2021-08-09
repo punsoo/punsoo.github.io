@@ -40,9 +40,8 @@ int solution(vector<string> lines) {
     for(int i = 0; i < lines.size(); i++) {
         
         int h = stoi(lines[i].substr(11, 2)) * 3600 * 1000;
-        int m = stoi(lines[i].substr(14, 2)) * 60 * 1000;
-        string test = lines[i].substr(17, 6); 
-        float s = stof(test) * 1000;        
+        int m = stoi(lines[i].substr(14, 2)) * 60 * 1000; 
+        float s = stof(lines[i].substr(17, 6)) * 1000;        
         int process = stof(lines[i].substr(24, 5)) * 1000;
         start.push_back(h + m + s - process + 1); //시작 시간과 끝 시간 포함
         end.push_back(h + m + s);
@@ -65,3 +64,22 @@ int solution(vector<string> lines) {
     return answer;
 }
 ```
+
+## Comments
+```cpp
+int s = stof(lines[i].substr(17, 6)) * 1000;  
+```
+이렇게 하면 틀린 경우가 생긴다. (ex lines[i].substr(17, 6) 가 4.002 일 때)  
+원인은 stof가 오차가 있는 상태로 실수로 변환해주고, int는 소수점 자리를 버림하기 떄문이다.
+
+```cpp
+float x = stof("4.002");
+float y = 4.002;
+```
+이 경우에는 x==y 가 true이고
+```cpp
+float x = stof("4.002") * 1000;
+float y = 4.002 * 1000;
+```
+이 경우에는 false이다. 
+출력하면 둘다 4002로 나오지만 int로 형변환하면 x는 4001, y는 4002가 나온다.
