@@ -31,17 +31,33 @@ last_modified_at: 2021-08-10
 ### 생성자 주입
 
 - 컴포넌트 스캔으로 클래스가 빈으로 등록이 될 때 생성자가 호출된다.
+
 - 이 때 생성자에 @Autowired가 있으면, 스프링이 연관된 객체를 스프링 컨테이너에서 찾아서 넣어준다.
+
 - 그러니까 Bean 등록이 되기 전, Bean이 생성될 때 의존 관계에 있는 Bean들이 주입된다.
+
 - 생성자가 1개만 있으면 @Autowired는 생략할 수 있다.
-- 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
+
 - 불변 의존관계를 만든다.
   - 따로 setter 메서드를 만들거나 외부접근을 허용하지 않는한 불변 의존관계이다.
-  - 수정자/필드 주입과 다르게 해당 필드를 final로 선언할 수 있다.
+  
+  - 수정자/필드 주입과 다르게 해당 필드를 final로 선언할 수 있다. (final은 객체가 생성된 뒤에 호출되면 안된다.)
+  
+    생성자에서 혹시라도 값이 설정되지 않는 오류(누락)를 컴파일 시점에 막아준다. (컴파일 오류는 바로 잡기 아주 편하다)
+  
+  - 대부분의 경우 의존관계를 변경할 일이 없고 변경되면 안되는 경우도 많다.
+  
+  - 생성자 호출시점에(객체를 생성할 때) 딱 1번만 호출되는 것이 보장된다.(불변)
+  
 - 생성자에 명시해줌으로써 필수 의존관계라고 할 수 있다.  (생성자는 무조건 불러야함으로)
+
 - private 선언한 필드는 왠만하면 세팅을 해주어야 한다는 뜻이다.
+
 - 왠만하면 생성자에는 NULL을 허용하지 않는다 - (문서에 따로 적혀있지 않는한!)
+
 - 독릭적으로 인스턴스화가 가능한 POJO(Plain Old Java Object)를 구현한다. ([참고1](https://madplay.github.io/post/why-constructor-injection-is-better-than-field-injection)) ([참고2](https://coding-start.tistory.com/250))
+
+- 생정자 주입 방식은 프레임 워크에 의존하지 않고, 순수한 자바 언어의 특징을 잘 살리는 방법이다.
 
 
 
@@ -100,9 +116,11 @@ last_modified_at: 2021-08-10
 
 > 스프링 레퍼런스에는 강제화되는(필수적인) 의존성의 경우를 비롯해 기본적으로 생성자 주입을 권장한다.  
 >
-> 합리적인 디폴트를 부여할 수 있고 선택적인 의존성을 사용할 때만 수정자 주입을 사용하기를 권장한다 
+> 합리적인 디폴트를 부여할 수 있고 선택적인 의존성을 사용할 때만(옵션이 필요하면) 수정자 주입을 사용하기를 권장한다 
 >
 > 그렇지 않으면 의존성을 사용하는 모든 코드에 null 체크를 구현해야 한다.
+>
+> 필드 주입은 사용하지 않는게 좋다.
 >
 > ([참고](https://coding-start.tistory.com/250))
 
@@ -136,7 +154,40 @@ last_modified_at: 2021-08-10
 - 그래서 생성자 주입은 컴파일 시점(객체의 생성 시점)에 BeanCreationException 을 발생시킨다. 서로 참조하는 객체가 생성되지 않았는데 그 빈을 참조하기 떄문이다.
 - 다르게 표현하면,  생성자 주입에서 객체가 생성이 되려면 주입하려는 Bean이 정상적인 상태여야 한다. (그렇지 않아서 에러 발생)
 
+## 옵션 처리
 
+주입할 스프링 빈이 없어도 (스프링에 등록이 안되어있어도) 동작해야할 때가 있다.
+
+@Autowired 의 required 옵션이 디폴트로 true이기에, 자동 주입 대상이 없으면 오류가 발생한다.
+
+- @Autowired(required=false): 자동 주입할 대상이 없으면 수정자 메서드 자체가 호출이 되지 않는다.
+
+  ```java
+  @Autowired(required = false)
+  public void setNoBean1(Member member) {
+  System.out.println("setNoBean1 = " + member);
+  }
+  ```
+
+- org.springframework.lang.@Nullable: 자동 주입할 대상이 없으면 null이 입력된다.
+
+  ```java
+  @Autowired
+  public void setNoBean2(@Nullable Member member) {
+  System.out.println("setNoBean2 = " + member);
+  }
+  ```
+
+- Optional<>: 자동 주입할 대상이 없으면 Optional.empty가 입력된다.
+
+  ```java
+  @Autowired(required = false)
+  public void setNoBean3(Optional<Member> member) {
+  System.out.println("setNoBean3 = " + member);
+  }
+  ```
+
+  
 
 ## Reference
 
