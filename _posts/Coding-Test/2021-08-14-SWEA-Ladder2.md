@@ -26,7 +26,7 @@ last_modified_at: 2021-08-14
 
 Problem URL : [Ladder2](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV14BgD6AEECFAYh&categoryId=AV14BgD6AEECFAYh&categoryType=CODE&problemTitle=ladder&orderBy=FIRST_REG_DATETIME&selectCodeLang=ALL&select-1=&pageSize=10&pageIndex=1)
 
-```cpp
+```python
 for tc in range(1, 11):
     tc = int(input())
     arr = [list(map(int, input().split())) for _ in range(100)]
