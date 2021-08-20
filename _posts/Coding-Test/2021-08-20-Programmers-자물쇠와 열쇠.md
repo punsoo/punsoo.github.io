@@ -1,14 +1,14 @@
 ---
 defaults:
-- scope:
-  path: ""
-  type: posts
-  values:
-  layout: single
-  author_profile: true
-  comments: true
-  share: true
-  related: true
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      comments: true
+      share: true
+      related: true
 
 title: "[Programmers] 자물쇠와 열쇠"
 excerpt: "[Programmers] 자물쇠와 열쇠"
@@ -16,13 +16,12 @@ toc: true
 toc_sticky: true
 toc_label: "목차"
 categories:
-- Coding Test
-  tags:
-- [Coding Test, 구현]
-  date: 2021-08-20
-  last_modified_at: 2021-08-20
+  - Coding Test
+tags:
+  - [Coding Test, 구현]
+date: 2021-08-20
+last_modified_at: 2021-08-20
 ---
-
 # [Programmers] 자물쇠와 열쇠
 
 Problem URL : [자물쇠와 열쇠](https://programmers.co.kr/learn/courses/30/lessons/60059)
