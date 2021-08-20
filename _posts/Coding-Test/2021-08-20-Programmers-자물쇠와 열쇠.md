@@ -1,14 +1,14 @@
 ---
 defaults:
-  - scope:
-      path: ""
-      type: posts
-    values:
-      layout: single
-      author_profile: true
-      comments: true
-      share: true
-      related: true
+- scope:
+  path: ""
+  type: posts
+  values:
+  layout: single
+  author_profile: true
+  comments: true
+  share: true
+  related: true
 
 title: "[Programmers] 자물쇠와 열쇠"
 excerpt: "[Programmers] 자물쇠와 열쇠"
