@@ -1,20 +1,26 @@
 ---
 defaults:
-
 - scope:
   path: ""
-  type: posts values:
-  layout: single author_profile: true comments: true share: true related: true
+  type: posts
+  values:
+  layout: single
+  author_profile: true
+  comments: true
+  share: true
+  related: true
 
 title: "[Programmers] 자물쇠와 열쇠"
 excerpt: "[Programmers] 자물쇠와 열쇠"
-toc: true toc_sticky: true toc_label: "목차"
+toc: true
+toc_sticky: true
+toc_label: "목차"
 categories:
-
-- Coding Test tags:
+- Coding Test
+  tags:
 - [Coding Test, 구현]
-  date: 2021-08-20 last_modified_at: 2021-08-20
-
+  date: 2021-08-20
+  last_modified_at: 2021-08-20
 ---
 
 # [Programmers] 자물쇠와 열쇠
