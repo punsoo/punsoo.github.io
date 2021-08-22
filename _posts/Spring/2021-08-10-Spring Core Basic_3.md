@@ -196,6 +196,105 @@ last_modified_at: 2021-08-10
 
 ### 롬복과 최신 트렌드
 
+- @Getter, @Setter를 붙이기만 해도 getter, setter 메소드를 생성해준다.
+
+- @RequiredArgsConstructor 를 붙이기만 해도 final 필드들에 대해서 생성자를 자동으로 만들어준다.
+
+- build.gradle에 다음과 같이 lombok 설정을 추가해준다.
+
+  ```tex
+  configurations {
+      compileOnly {
+      	extendsFrom annotationProcessor
+      }
+  }
+  ```
+
+- lombok plugin 을 설치한다.
+- Preferences에서 Annotation Processors를 검색한 후, Enable annotation processing을 체크한다.
+
+### 빈 조회 결과가 여러 개일 때
+
+- @Autowired는 Type으로 조회하기 때문에, 여러 개의 하위 타입 빈이 조회될 수 있다.
+- 그렇다고 구체적인 구현 객체 클래스 타입(하위 타입)으로 지정하는 것은 DIP를 위반하고 유연성이 떨어진다.
+- 게다가 이름만 다르고 완전히 똑같은 타입의 스프링 빈이 2개 있을 때도 해결이 안된다.
+- 다음과 같이 3가지 방법으로 해결할 수 있다.
+
+1. @Autowired 필드명(파라미터명) 매칭을 사용할 수 있다.
+
+   먼저 타입 매칭을 시도하고, 여러 빈이 있을 때 추가로 필드 명, 파라미터 명으로 빈 이름을 매칭한다.
+
+2. @Qulifier 추가 구분자를 붙여준다
+
+   - @Component나 @Bean으로 빈 등록시 @Qualifier를 붙여준다.
+   - 주입시에도 @Qualifier를 붙여주고 등록한 이름을 적어준다.
+   - 만약 등록한 이름(ex @Qualifier("mainDiscountPolicy"))를 찾지 못하면, 빈 이름으로 추가로 찾는다.
+   - 하지만 @Qualifier는 @Qualifer를 찾는 용도로만 사용하는 게 명확하고 좋다.
+   - @Qulifer끼리 매칭 - 빈 이름으로 매칭 - NoSuchBeanDefinitionException 발생
+
+3. @Primary 를 사용해준다.
+
+   - 여러 빈이 매칭되면 @Primary가 우선권을 가진다.
+   - @Qualifier가 @Primary보다 우선권이 높다. (자동보다는 수동이, 넓은 범위보다는 좁은 범위가, 상세할수록 우선권이 높다)
+   - 메인 데이터베이스의 커넥션을 획득하는 빈은 @Primary를, 서브 데이터베이스의 커넥션을 획득하는 빈은 @Qualifier를 지정해서 명시적으로 획득 하는 방식으로 사용하면 코드를 깔끔하게 유지할 수 있다.
+
+- 조회한 빈이 모두 필요할 때 Map, List 와 같은 컬렉션 프레임워크를 사용해주면 된다.
+
+  ```java
+  private final Map<String, DiscountPolicy> policyMap;
+  private final List<DiscountPolicy> policies;
+  ```
+
+  이런 식으로 필드를 선언해 주입받으면 된다. (물론 이왕이면 생성자 주입으로!)
+
+### Annotation 직접 만들기
+
+- @Qualifier("mainDiscountPolicy") 이렇게 직접 문자로 적으면 컴파일시 타입 체크가 안된다.
+- 직접 어노테이션을 만들면 타입 체크는 물론, Intellij에서 사용한 부분 코드 추적에도 용이하다.
+- 애노테이션에는 상속이라는 개념이 없고, 이렇게 여러 애노테이션을 모아서 사용하는 기능은 스프링에서 지원해주는 기능이다.
+
+```java
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER,
+ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Qualifier("mainDiscountPolicy")
+public @interface MainDiscountPolicy {
+}
+```
+
+>  이렇게 여러 애노테이션을 조합해주는데, 나는 @Qualifier 안에 @Target, @Retention, @Documented 가 다 들어있어서 @Qualifier만 적어줘도 잘 동작하지 않을까 생각했었다. 테스트해보니 안된다... 일단 다 붙여줘야 동작하는 걸로 이해하자
+
+
+
+### 자동, 수동의 올바른 실무 운영 기준
+
+- 자동을 기본으로 사용하자
+
+  - 스프링은 @Component 뿐 아니라 @Controller, @Service, @Repository 처럼 계층에 맞추어 일반 애플리케이션 로직을 자동으로 스캔할 수 있도로 지원한다.
+
+  - 최근 스프링 부트는 컴포넌트 스캔을 기본으로 사용하고, 스프링 부트의 다양한 빈들도 조건이 맞으면 자동으로 등록하도록 설계하였다.
+
+  - 수동으로 빈을 등록하는 과정은 번거롭고, 빈이 많아질수록 설정 정보를 관리하는 것 자체가 부담이 된다.
+
+  - 자동만으로도 OCP, DIP를 지킬 수 있다.
+
+  - 문제가 발생해도 어떤 곳에서 문제가 발생하였는지 파악하기 쉬운 업무 로직에서 사용하기 좋다.
+
+  - 다형성을 활용할 떄 자동 등록을 사용한다면, 최소한 같은 패키지에 묶어두도록 하자
+
+  - 스프링과 스프링 부트가 자동으로 등록하는 수 많은 빈들 또한 스프링을 잘 이해하고 스프링의 의도대로 (자동으로) 잘 사용하자
+
+    
+
+- 수동은 언제 사용할까?
+
+  - 기술 지원 로직은 업무 로직에 비해 로직 수 자체도 적고, 보통 애플리케이션 전반에 걸쳐서 광범위하게 영향을 미친다.
+  - 기술 지원 로직은 수동 빈 등록으로 명확하게 들어내서 디버깅과 적용 여부를 명확하게 알 수 있도록 하자
+  - 비즈니스 로직 중에서도 다형성을 적극적으로 활용할 때 (ex Map<String, DiscountPolicy>) 사용해도 좋다.
+
+
+
 
 
 ## Reference
