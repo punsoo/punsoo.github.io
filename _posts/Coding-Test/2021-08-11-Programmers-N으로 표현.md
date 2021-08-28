@@ -27,43 +27,43 @@ last_modified_at: 2021-08-11
 Problem URL : [N으로 표현](https://programmers.co.kr/learn/courses/30/lessons/42895)
 
 ```cpp
-#include <vector>
+
 #include <unordered_set>
+#include <vector>
 
 using namespace std;
 
 int solution(int N, int number) {
-	vector<unordered_set<int>> DP(9);
+    vector<unordered_set<int>> DP(9);
     int NN = N;
-	for(int i = 1; i < 9; i++) {
-        if(number == NN) {
+    for (int i = 1; i < 9; i++) {
+        if (number == NN) {
             return i;
         }
         DP[i].insert(NN);
         NN = NN * 10 + N;
     }
-    
-	for (int k = 2; k < 9; k++) {
-		for (int i = 1; i < k; i++) {
-            for (int a : DP[i]) {
-				for (int b : DP[k - i]) {
-				    DP[k].insert(a + b);
-                    if(a > b) {
-						DP[k].insert(a - b);
-                    }
-					DP[k].insert(a * b);
-                    if(a >= b) {
-                        DP[k].insert(a / b);                       
-                    }
-						
-				}
-			}
-		}
-		if (DP[k].count(number)) {
-			return k;
-        }
-	}
 
-	return -1;
+    for (int k = 2; k < 9; k++) {
+        for (int i = 1; i < k; i++) {
+            for (int a : DP[i]) {
+                for (int b : DP[k - i]) {
+                    DP[k].insert(a + b);
+                    if (a > b) {
+                        DP[k].insert(a - b);
+                    }
+                    DP[k].insert(a * b);
+                    if (a >= b) {
+                        DP[k].insert(a / b);
+                    }
+                }
+            }
+        }
+        if (DP[k].count(number)) {
+            return k;
+        }
+    }
+
+    return -1;
 }
 ```
