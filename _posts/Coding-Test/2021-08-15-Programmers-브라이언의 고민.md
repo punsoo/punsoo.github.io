@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, 구현, 문자열]
+  - [Coding Test, Programmers, 구현, 문자열]
 date: 2021-08-12
 last_modified_at: 2021-08-12
 ---

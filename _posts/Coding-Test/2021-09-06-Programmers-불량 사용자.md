@@ -17,7 +17,7 @@ toc_label: "목차"
 categories:
   - Coding Test 
 tags:
-  - [Coding Test, BOJ, BFS, 문자열]
+  - [Coding Test, Programmers, BFS, 문자열]
 date: 2021-09-06
 last_modified_at: 2021-09-06
 ---

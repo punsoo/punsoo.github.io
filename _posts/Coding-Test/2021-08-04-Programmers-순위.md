@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, 그래프]
+  - [Coding Test, Programmers, 그래프]
 date: 2021-08-04
 last_modified_at: 2021-08-04
 ---

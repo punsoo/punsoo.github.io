@@ -17,7 +17,7 @@ toc_label: "목차"
 categories:
   - Coding Test 
 tags:
-  - [Coding Test, BOJ, 구현, STACK, 연결 리스트]
+  - [Coding Test, Programmers, 구현, STACK, 연결 리스트]
 date: 2021-09-04
 last_modified_at: 2021-09-04
 ---

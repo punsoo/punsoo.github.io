@@ -17,7 +17,7 @@ toc_label: "목차"
 categories:
   - Coding Test 
 tags:
-  - [Coding Test, BOJ, 동적 프로그래밍]
+  - [Coding Test, Programmers, 동적 프로그래밍]
 date: 2021-09-07
 last_modified_at: 2021-09-07
 ---

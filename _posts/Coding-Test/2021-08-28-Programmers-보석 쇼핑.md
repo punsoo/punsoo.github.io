@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, 투포인터]
+  - [Coding Test, Programmers, 투포인터]
 date: 2021-08-28
 last_modified_at: 2021-08-28
 ---

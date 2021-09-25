@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, 힙, 우선순위 큐]
+  - [Coding Test, Programmers, 힙, 우선순위 큐]
 date: 2021-08-16
 last_modified_at: 2021-08-16
 ---

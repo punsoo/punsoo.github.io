@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, 이분 탐색]
+  - [Coding Test, Programmers, 이분 탐색]
 date: 2021-08-05
 last_modified_at: 2021-08-05
 ---

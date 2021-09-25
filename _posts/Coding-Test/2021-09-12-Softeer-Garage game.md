@@ -18,7 +18,7 @@ toc_label: "목차"
 categories:
   - Coding Test
 tags:
-  - [Coding Test, DFS, BFS]
+  - [Coding Test, Softeer, DFS, BFS]
 date: 2021-09-12
 last_modified_at: 2021-09-12
 ---

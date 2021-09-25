@@ -17,7 +17,7 @@ toc_label: "목차"
 categories:
   - Coding Test 
 tags:
-  - [Coding Test, BOJ, 파라메트릭 서치]
+  - [Coding Test, Programmers, 파라메트릭 서치]
 date: 2021-09-17
 last_modified_at: 2021-09-17
 ---
