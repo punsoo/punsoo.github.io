@@ -74,7 +74,7 @@ void postorder(vector<int> &answer, Node *node){
 }
 
 vector<vector<int>> solution(vector<vector<int>> nodeinfo){
-    vector<vector<int>> answer = {{}, {}};
+    vector<vector<int>> answer = { {}, {} };
     vector<Node> nodes;
     Node *root;
     
