@@ -15,9 +15,9 @@ toc: true
 toc_sticky: true
 toc_label: "목차"
 categories:
-  - Coding Test 
+  - SQL 
 tags:
-  - [Coding Test, Programmers, 동적 프로그래밍]
+  - [SQL, Programmers]
 date: 2021-10-15
 last_modified_at: 2021-10-15
 ---
